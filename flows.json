@@ -1,233 +1,506 @@
 [
     {
-        "id": "1a2b3c4d5e6f",
+        "id": "511a305093965f6e",
         "type": "tab",
-        "label": "Simulated Dashboard",
+        "label": "Flow 1",
         "disabled": false,
-        "info": ""
+        "info": "",
+        "env": []
     },
     {
-        "id": "dashboard-tab",
-        "type": "ui_tab",
-        "name": "Load Cell Monitor",
-        "icon": "dashboard",
-        "order": 1
-    },
-    {
-        "id": "dashboard",
-        "type": "ui_group",
-        "name": "Dashboard",
-        "tab": "dashboard-tab",
-        "order": 1,
-        "disp": true,
-        "width": "6",
-        "collapse": false
-    },
-    {
-        "id": "f7fece22543fb812",
-        "type": "ui_base",
-        "theme": {
-            "name": "theme-light",
-            "lightTheme": {
-                "default": "#0094CE",
-                "baseColor": "#0094CE",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": false
-            },
-            "darkTheme": {
-                "default": "#097479",
-                "baseColor": "#097479",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": false
-            },
-            "customTheme": {
-                "name": "Untitled Theme 1",
-                "default": "#4B7930",
-                "baseColor": "#4B7930",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
-            },
-            "themeState": {
-                "base-color": {
-                    "default": "#0094CE",
-                    "value": "#0094CE",
-                    "edited": false
-                },
-                "page-titlebar-backgroundColor": {
-                    "value": "#0094CE",
-                    "edited": false
-                },
-                "page-backgroundColor": {
-                    "value": "#fafafa",
-                    "edited": false
-                },
-                "page-sidebar-backgroundColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "group-textColor": {
-                    "value": "#1bbfff",
-                    "edited": false
-                },
-                "group-borderColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "group-backgroundColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "widget-textColor": {
-                    "value": "#111111",
-                    "edited": false
-                },
-                "widget-backgroundColor": {
-                    "value": "#0094ce",
-                    "edited": false
-                },
-                "widget-borderColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "base-font": {
-                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
-                }
-            },
-            "angularTheme": {
-                "primary": "indigo",
-                "accents": "blue",
-                "warn": "red",
-                "background": "grey",
-                "palette": "light"
-            }
+        "id": "846814693cfc6adc",
+        "type": "group",
+        "z": "511a305093965f6e",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
         },
-        "site": {
-            "name": "Node-RED Dashboard",
-            "hideToolbar": "false",
-            "allowSwipe": "false",
-            "lockMenu": "false",
-            "allowTempTheme": "true",
-            "dateFormat": "DD/MM/YYYY",
-            "sizes": {
-                "sx": 48,
-                "sy": 48,
-                "gx": 6,
-                "gy": 6,
-                "cx": 6,
-                "cy": 6,
-                "px": 0,
-                "py": 0
-            }
-        }
+        "nodes": [
+            "bd259b4ae780d9b4",
+            "7dd17b255cb31115",
+            "85e562bcc5c220bf"
+        ],
+        "x": 414,
+        "y": 479,
+        "w": 192,
+        "h": 182
     },
     {
-        "id": "random-data",
-        "type": "inject",
-        "z": "1a2b3c4d5e6f",
-        "name": "Generate Simulated Data",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "0.5",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "0.1",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 200,
-        "y": 100,
+        "id": "de32119c541f89e2",
+        "type": "serial in",
+        "z": "511a305093965f6e",
+        "name": "PICO Input (Pounds)",
+        "serial": "88e4f11f8bd2afd6",
+        "x": 130,
+        "y": 560,
         "wires": [
             [
-                "simulate-function"
+                "47fdec221bd53b34"
             ]
         ]
     },
     {
-        "id": "simulate-function",
+        "id": "47fdec221bd53b34",
         "type": "function",
-        "z": "1a2b3c4d5e6f",
-        "name": "Generate Left/Right %",
-        "func": "let left = Math.random() * 100;\nlet right = 100 - left;\nreturn [\n    { payload: left, topic: \"Left Side\" },\n    { payload: right, topic: \"Right Side\" }\n];",
-        "outputs": 2,
-        "x": 400,
-        "y": 100,
+        "z": "511a305093965f6e",
+        "name": "function 1",
+        "func": "let data = msg.payload.trim().split(\",\");\nif (data[0] === \"force\" && data.length === 3) {\n    let leftForce = parseFloat(data[1]);\n    let rightForce = parseFloat(data[2]);\n    let totalWeight = leftForce + rightForce; // Calculate total\n\n    return [\n        { payload: leftForce, topic: \"Left Side Force\" },\n        { payload: rightForce, topic: \"Right Side Force\" },\n        { payload: totalWeight, topic: \"Total Weight\" }\n    ];\n}\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 560,
         "wires": [
             [
-                "left-gauge",
-                "chart"
+                "bd259b4ae780d9b4",
+                "7dd17b255cb31115",
+                "85e562bcc5c220bf"
+            ]
+        ]
+    },
+    {
+        "id": "02dc9e0add99ce3c",
+        "type": "function",
+        "z": "511a305093965f6e",
+        "name": "Generate Left/Right %",
+        "func": "let data = msg.payload.trim().split(\",\"); // Split incoming \"percent,L,R\" data\nif (data[0] === \"percent\" && data.length === 3) {\n    let leftPercent = parseFloat(data[1]);\n    let rightPercent = parseFloat(data[2]);\n\n    return [\n        { payload: leftPercent, topic: \"Left Side %\" },\n        { payload: rightPercent, topic: \"Right Side %\" }\n    ];\n}\nreturn null; // Ignore incorrect data\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 120,
+        "wires": [
+            [
+                "43c453328a409914",
+                "a7bb204635b76da5"
             ],
             [
-                "right-gauge",
-                "chart"
+                "7e645cc095601e2f",
+                "a7bb204635b76da5"
             ]
         ]
     },
     {
-        "id": "left-gauge",
+        "id": "43c453328a409914",
         "type": "ui_gauge",
-        "z": "1a2b3c4d5e6f",
+        "z": "511a305093965f6e",
         "name": "Left Side %",
-        "group": "dashboard",
-        "order": 1,
-        "width": "3",
-        "height": "3",
+        "group": "db0df14870f4a4a6",
+        "order": 2,
+        "width": 4,
+        "height": 4,
         "gtype": "gage",
         "title": "Left Side %",
         "label": "%",
         "format": "{{msg.payload}}",
         "min": "0",
         "max": "100",
-        "x": 600,
-        "y": 50,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 570,
+        "y": 70,
         "wires": []
     },
     {
-        "id": "right-gauge",
+        "id": "7e645cc095601e2f",
         "type": "ui_gauge",
-        "z": "1a2b3c4d5e6f",
+        "z": "511a305093965f6e",
         "name": "Right Side %",
-        "group": "dashboard",
-        "order": 2,
-        "width": "3",
-        "height": "3",
+        "group": "db0df14870f4a4a6",
+        "order": 4,
+        "width": 4,
+        "height": 4,
         "gtype": "gage",
         "title": "Right Side %",
         "label": "%",
         "format": "{{msg.payload}}",
         "min": "0",
         "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
         "x": 600,
-        "y": 150,
+        "y": 120,
         "wires": []
     },
     {
-        "id": "chart",
+        "id": "e178d8b46096fcfc",
+        "type": "inject",
+        "z": "511a305093965f6e",
+        "name": "Clear Graph",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "x": 320,
+        "y": 300,
+        "wires": [
+            [
+                "b50e2a4abfe87e2d",
+                "a7bb204635b76da5"
+            ]
+        ]
+    },
+    {
+        "id": "a7bb204635b76da5",
         "type": "ui_chart",
-        "z": "1a2b3c4d5e6f",
-        "name": "Force % Over Time",
-        "group": "dashboard",
+        "z": "511a305093965f6e",
+        "name": "",
+        "group": "dashboard-group",
         "order": 3,
-        "width": "6",
-        "height": "4",
+        "width": 10,
+        "height": 5,
         "label": "Force % Over Time",
         "chartType": "line",
         "legend": "true",
-        "xformat": "HH:mm:ss",
+        "xformat": "ss",
         "interpolate": "linear",
-        "nodata": "Waiting for data...",
+        "nodata": "Please step on a scale to see data. ",
+        "dot": false,
         "ymin": "0",
         "ymax": "100",
-        "removeOlder": "10",
-        "removeOlderPoints": "",
-        "removeOlderUnit": "minutes",
-        "cutout": "0",
+        "removeOlder": 1,
+        "removeOlderPoints": "50",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
         "outputs": 1,
-        "x": 600,
-        "y": 250,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 620,
+        "y": 200,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "b50e2a4abfe87e2d",
+        "type": "debug",
+        "z": "511a305093965f6e",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "c46702b1c943dc47",
+        "type": "debug",
+        "z": "511a305093965f6e",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "baefcc7158ff21f5",
+        "type": "ui_button",
+        "z": "511a305093965f6e",
+        "name": "",
+        "group": "dashboard-group",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Reset Graph",
+        "tooltip": "",
+        "color": "white",
+        "bgcolor": "indigo",
+        "className": "",
+        "icon": "delete",
+        "payload": "[]",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 300,
+        "y": 240,
+        "wires": [
+            [
+                "a7bb204635b76da5"
+            ]
+        ]
+    },
+    {
+        "id": "6542a56afe54d9f8",
+        "type": "serial in",
+        "z": "511a305093965f6e",
+        "name": "PICO Input (Percent)",
+        "serial": "88e4f11f8bd2afd6",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "02dc9e0add99ce3c"
+            ]
+        ]
+    },
+    {
+        "id": "bd259b4ae780d9b4",
+        "type": "ui_text",
+        "z": "511a305093965f6e",
+        "g": "846814693cfc6adc",
+        "group": "f3acf1662c61596c",
+        "order": 1,
+        "width": 4,
+        "height": 2,
+        "name": "",
+        "label": "Left Side",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 500,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "7dd17b255cb31115",
+        "type": "ui_text",
+        "z": "511a305093965f6e",
+        "g": "846814693cfc6adc",
+        "group": "f3acf1662c61596c",
+        "order": 4,
+        "width": 4,
+        "height": 2,
+        "name": "",
+        "label": "Right Side",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 510,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "4f46635bc2a8fe24",
+        "type": "ui_media",
+        "z": "511a305093965f6e",
+        "group": "dashboard-group",
+        "name": "",
+        "width": 0,
+        "height": 0,
+        "order": 5,
+        "category": "Category 1",
+        "file": "EquaSync Logo.jpeg",
+        "layout": "adjust",
+        "showcontrols": true,
+        "loop": true,
+        "onstart": false,
+        "scope": "local",
+        "tooltip": "",
+        "x": 290,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "85e562bcc5c220bf",
+        "type": "ui_text",
+        "z": "511a305093965f6e",
+        "g": "846814693cfc6adc",
+        "group": "f3acf1662c61596c",
+        "order": 7,
+        "width": 4,
+        "height": 2,
+        "name": "",
+        "label": "Total Weight",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 510,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "44223e0667a1edb6",
+        "type": "ui_spacer",
+        "z": "511a305093965f6e",
+        "name": "spacer",
+        "group": "f3acf1662c61596c",
+        "order": 2,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "a39dcde8445c73a0",
+        "type": "ui_spacer",
+        "z": "511a305093965f6e",
+        "name": "spacer",
+        "group": "f3acf1662c61596c",
+        "order": 3,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "cf27759ba8627e04",
+        "type": "ui_spacer",
+        "z": "511a305093965f6e",
+        "name": "spacer",
+        "group": "f3acf1662c61596c",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "d8dfd5c8ca782d16",
+        "type": "ui_spacer",
+        "z": "511a305093965f6e",
+        "name": "spacer",
+        "group": "f3acf1662c61596c",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "12fdeef0eddcee85",
+        "type": "ui_spacer",
+        "z": "511a305093965f6e",
+        "name": "spacer",
+        "group": "f3acf1662c61596c",
+        "order": 8,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "2f2c5a217d634f74",
+        "type": "ui_spacer",
+        "z": "511a305093965f6e",
+        "name": "spacer",
+        "group": "f3acf1662c61596c",
+        "order": 9,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "88e4f11f8bd2afd6",
+        "type": "serial-port",
+        "name": "PICO USB",
+        "serialport": "/dev/ttyACM0",
+        "serialbaud": "115200",
+        "databits": 8,
+        "parity": "none",
+        "stopbits": 1,
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "utf-8 string",
+        "responsetimeout": 10000
+    },
+    {
+        "id": "db0df14870f4a4a6",
+        "type": "ui_group",
+        "name": "Force Percentages",
+        "tab": "dashboard-tab",
+        "order": 1,
+        "disp": true,
+        "width": 8,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "dashboard-group",
+        "type": "ui_group",
+        "name": "Line Graph",
+        "tab": "dashboard-tab",
+        "order": 1,
+        "disp": true,
+        "width": 10,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "f3acf1662c61596c",
+        "type": "ui_group",
+        "name": "Force (lbs)",
+        "tab": "dashboard-tab",
+        "order": 3,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "dashboard-tab",
+        "type": "ui_tab",
+        "name": "EquaSync Dashboard",
+        "icon": "",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
     }
 ]
