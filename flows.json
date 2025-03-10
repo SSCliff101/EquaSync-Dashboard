@@ -445,7 +445,7 @@
         "id": "88e4f11f8bd2afd6",
         "type": "serial-port",
         "name": "PICO USB",
-        "serialport": "/dev/ttyACM0",
+        "serialport": "/dev/tty.usbmodem101",
         "serialbaud": "115200",
         "databits": 8,
         "parity": "none",
