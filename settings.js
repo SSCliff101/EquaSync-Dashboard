@@ -21,6 +21,7 @@
  **/
 
 module.exports = {
+    httpStatic: 'public'
 
 /*******************************************************************************
  * Flow File and User Directory Settings
