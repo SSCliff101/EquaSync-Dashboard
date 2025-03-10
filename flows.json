@@ -1,0 +1,233 @@
+[
+    {
+        "id": "1a2b3c4d5e6f",
+        "type": "tab",
+        "label": "Simulated Dashboard",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "dashboard-tab",
+        "type": "ui_tab",
+        "name": "Load Cell Monitor",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "dashboard",
+        "type": "ui_group",
+        "name": "Dashboard",
+        "tab": "dashboard-tab",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "f7fece22543fb812",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "random-data",
+        "type": "inject",
+        "z": "1a2b3c4d5e6f",
+        "name": "Generate Simulated Data",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "0.5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 100,
+        "wires": [
+            [
+                "simulate-function"
+            ]
+        ]
+    },
+    {
+        "id": "simulate-function",
+        "type": "function",
+        "z": "1a2b3c4d5e6f",
+        "name": "Generate Left/Right %",
+        "func": "let left = Math.random() * 100;\nlet right = 100 - left;\nreturn [\n    { payload: left, topic: \"Left Side\" },\n    { payload: right, topic: \"Right Side\" }\n];",
+        "outputs": 2,
+        "x": 400,
+        "y": 100,
+        "wires": [
+            [
+                "left-gauge",
+                "chart"
+            ],
+            [
+                "right-gauge",
+                "chart"
+            ]
+        ]
+    },
+    {
+        "id": "left-gauge",
+        "type": "ui_gauge",
+        "z": "1a2b3c4d5e6f",
+        "name": "Left Side %",
+        "group": "dashboard",
+        "order": 1,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Left Side %",
+        "label": "%",
+        "format": "{{msg.payload}}",
+        "min": "0",
+        "max": "100",
+        "x": 600,
+        "y": 50,
+        "wires": []
+    },
+    {
+        "id": "right-gauge",
+        "type": "ui_gauge",
+        "z": "1a2b3c4d5e6f",
+        "name": "Right Side %",
+        "group": "dashboard",
+        "order": 2,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Right Side %",
+        "label": "%",
+        "format": "{{msg.payload}}",
+        "min": "0",
+        "max": "100",
+        "x": 600,
+        "y": 150,
+        "wires": []
+    },
+    {
+        "id": "chart",
+        "type": "ui_chart",
+        "z": "1a2b3c4d5e6f",
+        "name": "Force % Over Time",
+        "group": "dashboard",
+        "order": 3,
+        "width": "6",
+        "height": "4",
+        "label": "Force % Over Time",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting for data...",
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": "10",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "minutes",
+        "cutout": "0",
+        "outputs": 1,
+        "x": 600,
+        "y": 250,
+        "wires": [
+            []
+        ]
+    }
+]
